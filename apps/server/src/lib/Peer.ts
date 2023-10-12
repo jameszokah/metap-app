@@ -1,15 +1,47 @@
 import Logger from './logger/Logger';
 
-const EventEmitter = require('events').EventEmitter;
-const userRoles = require('./access/roles');
+import  {EventEmitter} from 'events';
+import {userRoles} from './access/roles';
+import { Socket } from 'socket.io';
+import { PeerType } from './types/peer';
+import { UserRoleType } from './types/types';
+
 
 const logger = new Logger('Peer');
 
 const RECORDING_TYPE_LOCAL='local';
 
-class Peer extends EventEmitter
-{
-	constructor({ id, roomId, socket })
+
+
+
+
+export default class Peer extends EventEmitter implements PeerType {
+
+	_id: string;
+	_socket: Socket;
+	_authId: null;
+	_authenticated: boolean;
+	_authenticatedTimestamp: number | null;
+	_closed: boolean;
+	_consumers: Map<any, any> | null;
+	_displayName: null;
+	_email: null;
+	_inLobby: false;
+	_joined: false;
+	_joinedTimestamp: number | null;
+	_localRecordingState: null;
+	_picture: null;
+	_producers: Map<any, any> | null;
+	_raisedHand: boolean | null;
+	_raisedHandTimestamp: number | null;
+	_recordingStateHistory: object[] = [];
+	_roles: UserRoleType[];
+	_roomId: string;
+	_routerId: string | null;
+	_rtpCapabilities: null;
+	_transports: Map<any, any> | null;	
+
+	constructor({ id, roomId, socket }: {roomId: string, id: string, socket: Socket})
 	{
 		logger.info('constructor() [id:"%s"]', id);
 		super();
@@ -36,7 +68,7 @@ class Peer extends EventEmitter
 
 		this._roles = [ userRoles.NORMAL ];
 
-		this._displayName = false;
+		this._displayName = null;
 
 		this._picture = null;
 
@@ -312,8 +344,8 @@ class Peer extends EventEmitter
 		return this._recordingStateHistory;
 	}
 
-	set localRecordingState(recordingState)
-	{
+	// eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
+	set localRecordingState(recordingState) {
 		this._localRecordingState=recordingState;
 		this.addRecordingStateHistory(recordingState, RECORDING_TYPE_LOCAL);
 	}
@@ -424,11 +456,11 @@ class Peer extends EventEmitter
 			raisedHand            : this.raisedHand,
 			raisedHandTimestamp   : this.raisedHandTimestamp,
 			localRecordingState   : this.localRecordingState,
-			recordingStateHistory : this.localRecordingStateHistory
+			recordingStateHistory : this.recordingStateHistory
 		};
 
 		return peerInfo;
 	}
 }
 
-module.exports = Peer;
+

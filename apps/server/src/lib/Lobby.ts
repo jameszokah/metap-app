@@ -1,11 +1,18 @@
 import Logger from './logger/Logger';
 
-const EventEmitter = require('events').EventEmitter;
+import {EventEmitter} from 'events';
+import { LobbyType } from './types/lobby';
+import Peer from './Peer';
+import { Socket } from 'socket.io';
 
 const logger = new Logger('Lobby');
 
-class Lobby extends EventEmitter
-{
+export default class Lobby extends EventEmitter implements LobbyType {
+
+	_closed: boolean;
+	_roomId: string;
+	_peers: Peer[];
+
 	constructor()
 	{
 		logger.info('constructor()');
@@ -15,7 +22,7 @@ class Lobby extends EventEmitter
 		// Closed flag.
 		this._closed = false;
 
-		this._peers = {};
+		this._peers = [];
 	}
 
 	close()
@@ -94,26 +101,29 @@ class Lobby extends EventEmitter
 		logger.info('promotePeer() [peer:"%s"]', peerId);
 
 		const peer = this._peers[peerId];
+		
+		
 
 		if (peer)
 		{
-			peer.socket.removeListener('request', peer.socketRequestHandler);
-			peer.removeListener('gotRole', peer.gotRoleHandler);
-			peer.removeListener('displayNameChanged', peer.displayNameChangeHandler);
-			peer.removeListener('pictureChanged', peer.pictureChangeHandler);
-			peer.removeListener('close', peer.closeHandler);
+			// peer.socket.removeListener('request', peer.socketRequestHandler);
+			// peer.removeListener('gotRole', peer.gotRoleHandler);
+			// peer.removeListener('displayNameChanged', peer.displayNameChangeHandler);
+			// peer.removeListener('pictureChanged', peer.pictureChangeHandler);
+			// peer.removeListener('close', peer.closeHandler);
 
-			peer.socketRequestHandler = null;
-			peer.gotRoleHandler = null;
-			peer.displayNameChangeHandler = null;
-			peer.pictureChangeHandler = null;
-			peer.closeHandler = null;
+			// peer.socketRequestHandler = null;
+			// peer.gotRoleHandler = null;
+			// peer.displayNameChangeHandler = null;
+			// peer.pictureChangeHandler = null;
+			// peer.closeHandler = null;
 
 			this.emit('promotePeer', peer);
 			delete this._peers[peerId];
 		}
 	}
 
+	
 	parkPeer(peer)
 	{
 		logger.info('parkPeer() [peer:"%s"]', peer.id);
@@ -225,7 +235,7 @@ class Lobby extends EventEmitter
 		}
 	}
 
-	_notification(socket, method, data = {}, broadcast = false)
+	_notification(socket: Socket, method, data = {}, broadcast = false)
 	{
 		if (broadcast)
 		{
@@ -239,5 +249,3 @@ class Lobby extends EventEmitter
 		}
 	}
 }
-
-module.exports = Lobby;

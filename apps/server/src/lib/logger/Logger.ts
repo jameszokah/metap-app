@@ -1,6 +1,6 @@
 import debug from 'debug';
 
-const APP_NAME = 'edumeet-server';
+const APP_NAME = 'metap-server';
 
 export default class Logger
 {
@@ -12,7 +12,7 @@ private _warn: debug.Debugger;
 
 private _error: debug.Debugger;
 
-constructor(prefix: string)
+constructor(prefix?: string)
 {
 	if (prefix)
 	{

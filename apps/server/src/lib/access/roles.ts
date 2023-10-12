@@ -1,4 +1,4 @@
-module.exports = {
+export const userRoles =  {
 	// These can be changed, id must be unique.
 
 	// A person can give other peers any role that is promotable: true
