@@ -1,4 +1,3 @@
-import './global.css';
 
 export const metadata = {
   title: 'Metap',
@@ -12,7 +11,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="w-screen h-screen bg-dark-primary">{children}</body>
     </html>
   );
 }
