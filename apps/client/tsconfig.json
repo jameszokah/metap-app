@@ -22,7 +22,9 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/components/*": ["./components/*"],
+      "@/components/*": [
+        "./components/*"
+      ],
       "@ui/*": [
         "./components/ui/*"
       ],
@@ -48,7 +50,8 @@
     "../client/.next/types/**/*.ts",
     "../dist/client/.next/types/**/*.ts",
     "next-env.d.ts",
-    "../../client/.next/types/**/*.ts"
+    "../../client/.next/types/**/*.ts",
+    "../../dist/client/.next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
