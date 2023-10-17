@@ -27,7 +27,6 @@ import HandsUpFillIcon from "../assets/icons/hands_up_fill.svg";
 import HMenuFillIcon from "../assets/icons/h_menu_fill.svg";
 import SecureCheckFillIcon from "../assets/icons/secure_check_fill.svg";
 
-console.log(FullDisplayIcon);
 export {
   Logo,
   SvgMenu,
