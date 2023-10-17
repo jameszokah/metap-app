@@ -25,7 +25,7 @@
       "@/components/*": [
         "./components/*"
       ],
-      "@ui/*": [
+      "@/components/ui/*": [
         "./components/ui/*"
       ],
       "@/app/*": [
@@ -39,7 +39,9 @@
       ],
       "@/utils/*": [
         "./utils/*"
-      ]
+      ],"@/lib/*": [
+        "./lib/*"
+      ],
     }
   },
   "include": [

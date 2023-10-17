@@ -77,7 +77,7 @@ const Home: NextPage = () => {
                     </div> */}
                 </section>
                 <section
-                  className={`w-full flex justify-center items-center fixed lg:mt-1 lg:w-[76vw] h-16 absolute left-0 -bottom-20 lg:-left-20 lg:-bottom-20 ${
+                  className={`w-full flex justify-center items-center fixed lg:mt-1 lg:w-[76vw] h-16 left-0 -bottom-20 lg:-left-20 lg:bottom-20 ${
                     open
                       ? ""
                       : "lg:-left-2 transition-all duration-500 ease-in-out"
