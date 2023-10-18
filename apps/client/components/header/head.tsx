@@ -30,9 +30,9 @@ export const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 z-10 w-full border-b border-transparent-white backdrop-blur-[12px]">
-      <Container className="flex h-navigation-height">
-        <Link className="flex items-center text-md" href="/">
-          <Logo className="mr-4 h-[1.8rem] w-[1.8rem]" /> Linear
+      <Container className="flex h-[var(--navigation-height)]">
+        <Link className="flex items-center text-md mr-6" href="/">
+          <Logo className="mr-5 h-[3.1rem] w-[3.1rem]" /> Metap
         </Link>
 
         <div
@@ -52,7 +52,7 @@ export const Header = () => {
             <ul
               className={classNames(
                 "flex h-full flex-col md:flex-row md:items-center [&_li]:ml-6 [&_li]:border-b [&_li]:border-grey-dark md:[&_li]:border-none",
-                "ease-in [&_a:hover]:text-grey [&_a]:flex [&_a]:h-navigation-height [&_a]:w-full [&_a]:translate-y-8 [&_a]:items-center [&_a]:text-lg [&_a]:transition-[color,transform] [&_a]:duration-300 md:[&_a]:translate-y-0 md:[&_a]:text-sm [&_a]:md:transition-colors",
+                "ease-in [&_a:hover]:text-gray-500 [&_a]:flex [&_a]:h-[var(--navigation-height)] [&_a]:w-full [&_a]:translate-y-8 [&_a]:items-center [&_a]:text-lg [&_a]:transition-[color,transform] [&_a]:duration-300 md:[&_a]:translate-y-0 md:[&_a]:text-sm [&_a]:md:transition-colors",
                 hamburgerMenuIsOpen && "[&_a]:translate-y-0"
               )}
             >
@@ -75,7 +75,7 @@ export const Header = () => {
                 <Link href="#">Pricing</Link>
               </li>
               <li>
-                <Link href="#">Company</Link>
+                <Link href="#">Join</Link>
               </li>
             </ul>
           </nav>
@@ -85,7 +85,7 @@ export const Header = () => {
           <Link className="mr-6 text-sm" href="#">
             Log in
           </Link>
-          <Button variant={"default"} color="bg-[#031A13]">Sign up</Button>
+          <Button variant={"default"} className="bg-primary">Sign up</Button>
         </div>
 
         <button

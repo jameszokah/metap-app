@@ -10,7 +10,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="fSize">
       <body className="w-screen h-screen bg-dark-primary">{children}</body>
     </html>
   );

@@ -18,7 +18,7 @@ interface PeerProps {
 const Peer: FC<PeerProps> = ({
   stream,
   video = false,
-  audio = true,
+  audio = false,
   name = "James Zokah",
 }) => {
   return (
@@ -34,7 +34,7 @@ const Peer: FC<PeerProps> = ({
           }`}
         >
           <p
-            className={`absolute text-sm  ${
+            className={`absolute  ${
               video
                 ? "text-gray-400 -top-8 left-3"
                 : "text-primary -top-6 -left-2 "
