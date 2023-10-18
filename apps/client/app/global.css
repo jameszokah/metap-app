@@ -7,6 +7,9 @@
     }
     html {
         @apply bg-background font-sans text-off-white;
+        font-size: 62.5%;
+    }
+    .fSize {
         font-size: 82.5%;
     }
     .highlighted-keys .active rect:first-child {

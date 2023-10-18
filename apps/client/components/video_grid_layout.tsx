@@ -52,7 +52,7 @@ const VideoGridLayout = () => {
               key={i}
               className="lg:flex lg:justify-center lg:items-center"
             >
-              <Peer />
+              <Peer video />
             </SwiperSlide>
           );
         })}
