@@ -1,6 +1,6 @@
 'use client'
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Header from "@/components/header";
 import Nav from "@/components/nav";
@@ -11,10 +11,41 @@ import VideoGridLayout from "@/components/video_grid_layout";
 import ButtonDisplayLayout from "@/components/button_display_layout";
 import { GroupOutlineIcon, Chevron, AddFillIcon } from "@/components/icons";
 import Controls from "@/components/controls";
+import { socket } from "@/lib/socket";
 
 const Home: NextPage = () => {
   const [open, setOpen] = useState(true);
   const [chat, setChat] = useState(false);
+
+
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [fooEvents, setFooEvents] = useState([]);
+
+  useEffect(() => {
+    function onConnect() {
+      setIsConnected(true);
+      console.log("connected");
+    }
+
+    function onDisconnect() {
+      setIsConnected(false);
+    }
+
+
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+
+    socket.on('connection-success', ({ socketId }: {socketId: string}) => {
+      console.log(socketId)
+      // getLocalStream()
+    })
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+    };
+  }, []);
 
   return (
     <main className={""}>
@@ -86,7 +117,7 @@ const Home: NextPage = () => {
                   <Controls />
                 </section>
               </div>
-              <div className="lg:absolute  lg:right-0 lg:-top-9 bg-semi-dark hidden lg:min-h-[88vh] py-auto lg:w-[25%] lg:block lg:col-end-5 rounded-md">
+              <div className="lg:absolute lg:mr-5 lg:right-0 lg:-top-9 bg-semi-dark hidden lg:min-h-[88vh] py-auto lg:w-[24%] lg:block lg:col-end-5 rounded-md">
                 <div className="flex flex-col lg:relative w-full h-full">
                   <div className="flex text-white justify-center lg:relative">
                     <ButtonDisplayLayout
@@ -107,7 +138,7 @@ const Home: NextPage = () => {
                       {chat ? "Participant" : "Chats"}
                     </p>
                   </div>
-                  <div className="flex w-full h-full transition-all duration-500 ease-in-out ">
+                  <div className="flex w-full h-full transition-all duration-500 ease-in-out relative">
                     {chat ? <Participants /> : <Chats />}
                   </div>
                 </div>

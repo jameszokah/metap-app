@@ -10,5 +10,4 @@ export const Logo = ({ className }: { className?: string }) => (
 </clipPath>
 </defs>
 </svg>
-
 );

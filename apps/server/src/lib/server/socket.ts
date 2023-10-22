@@ -2,12 +2,13 @@
 import Logger from '../logger/Logger';
 import { config } from '../config/config';
 import { statusLog } from '../../utils/statusLog';
-import { getOrCreateRoom } from '../../main';
+// import { getOrCreateRoom } from '../../main';
 import Peer from '../Peer';
 import Room from '../Room';
 import { AwaitQueue } from 'awaitqueue';
 import * as http from 'http'
 import * as https from 'https'
+import { getOrCreateRoom } from '../../server';
 
 
 /**
@@ -19,7 +20,7 @@ export async function runWebSocketServer(mainListener: http.Server | https.Serve
     const ioServer = new io.Server(mainListener, { cookie: false })
 
     const logger = new Logger()
-	
+
 
 	// ioServer.use(
 	// 	sharedSession(session, sharedCookieParser, {})
@@ -45,12 +46,12 @@ export async function runWebSocketServer(mainListener: http.Server | https.Serve
 		queue.push(async () =>
 		{
 			const room = await getOrCreateRoom({ roomId });
-			let token = null;
+			const token = null;
 
-			if (socket.handshake.session.peerId === peerId)
-			{
-				token = room.getToken(peerId);
-			}
+			// if (socket.handshake.session.peerId === peerId)
+			// {
+			// 	token = room.getToken(peerId);
+			// }
 
 			let peer = peers.get(peerId);
 			let returning = false;
@@ -80,36 +81,36 @@ export async function runWebSocketServer(mainListener: http.Server | https.Serve
 				statusLog(rooms,peers);
 			});
 
-			if (
-				Boolean(socket.handshake.session.passport) &&
-				Boolean(socket.handshake.session.passport.user)
-			)
-			{
-				const {
-					id,
-					displayName,
-					picture,
-					email,
-					_userinfo
-				} = socket.handshake.session.passport.user;
+			// if (
+			// 	Boolean(socket.handshake.session.passport) &&
+			// 	Boolean(socket.handshake.session.passport.user)
+			// )
+			// {
+			// 	const {
+			// 		id,
+			// 		displayName,
+			// 		picture,
+			// 		email,
+			// 		_userinfo
+			// 	} = socket.handshake.session.passport.user;
 
-				peer.authId = id;
-				peer.displayName = displayName;
-				peer.picture = picture;
-				peer.email = email;
-				peer.authenticated = true;
+			// 	peer.authId = id;
+			// 	peer.displayName = displayName;
+			// 	peer.picture = picture;
+			// 	peer.email = email;
+			// 	peer.authenticated = true;
 
-				if (typeof config.userMapping === 'function')
-				{
-					await config.userMapping({ peer, room, roomId, userinfo: _userinfo });
-				}
-			}
+			// 	if (typeof config.userMapping === 'function')
+			// 	{
+			// 		await config.userMapping({ peer, room, roomId, userinfo: _userinfo });
+			// 	}
+			// }
 
 			room.handlePeer({ peer, returning });
 
-			socket.handshake.session.peerId = peer.id;
-			socket.handshake.session.touch();
-			socket.handshake.session.save();
+			// socket.handshake.session.peerId = peer.id;
+			// socket.handshake.session.touch();
+			// socket.handshake.session.save();
 
 			statusLog(rooms,peers);
 		})
@@ -126,6 +127,6 @@ export async function runWebSocketServer(mainListener: http.Server | https.Serve
 
 
 
-	
+
 }
 
