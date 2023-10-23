@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-const interactiveClient = require('./lib/interactive/Client');
+import interactiveClient from './lib/interactive/Client';
 
-interactiveClient();
+await interactiveClient();
