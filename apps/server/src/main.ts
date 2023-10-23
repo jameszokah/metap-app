@@ -14,6 +14,7 @@ const app = express()
 import https from 'httpolyglot'
 import fs from 'fs'
 import path from 'path'
+import cors from 'cors'
 // const __dirname = import.meta.resolve()
 
 import { Server } from 'socket.io'
@@ -21,6 +22,8 @@ import { Server } from 'socket.io'
 import * as mediasoup from 'mediasoup'
 import { Transport } from 'mediasoup/node/lib/types';
 
+
+app.use(cors())
 app.get('/', (req: Request, res: Response) => {
     res.json({
       query: req.params
@@ -29,7 +32,7 @@ app.get('/', (req: Request, res: Response) => {
 )
 
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 const [key, cert] = [
     fs.readFileSync('/workspaces/metap-app/apps/server/src/certs/key.pem', 'utf-8'),
@@ -52,8 +55,11 @@ httpsServer.listen(PORT, () => {
 // socket.io server
 const io = new Server(httpsServer, {
     cors: {
-        // origin: 'https://miniature-trout-5r5qvrqqjgqf746g-4200.app.github.dev/at/5656',
-        origin: '*',
+        origin: 'http://localhost:4200',
+        // 'https://miniature-trout-5r5qvrqqjgqf746g-4200.app.github.dev',
+        credentials: true,
+        // allowedHeaders: ['Access-Control-Allow-Origin: http://localhost:4200'],
+        // allowedHeaders: ['Access-Control-Allow-Origin: https://miniature-trout-5r5qvrqqjgqf746g-4200.app.github.dev'],
         // methods: ['GET', 'POST'],
 
     },
@@ -140,7 +146,8 @@ io.on('connection', async socket => {
         producers = removeItems(producers, socket.id, 'producer')
         transports = removeItems(transports, socket.id, 'transport')
 
-        const { roomName } = peers[socket.id]
+        const peer = peers[socket.id]
+        const roomName = peer.roomName
         delete peers[socket.id]
 
         // remove socket from room

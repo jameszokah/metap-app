@@ -12,10 +12,12 @@ import ButtonDisplayLayout from "@/components/button_display_layout";
 import { GroupOutlineIcon, Chevron, AddFillIcon } from "@/components/icons";
 import Controls from "@/components/controls";
 import { socket } from "@/lib/socket";
+import { getLocalStream, streamSuccess } from "@/lib/mediasoup";
 
 const Home: NextPage = () => {
   const [open, setOpen] = useState(true);
   const [chat, setChat] = useState(false);
+  const [stream, setStream] = useState<MediaStream | null>(null);
 
 
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -36,9 +38,18 @@ const Home: NextPage = () => {
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
 
-    socket.on('connection-success', ({ socketId }: {socketId: string}) => {
-      console.log(socketId)
-      // getLocalStream()
+    socket.on('connection-success', async function({ socketId }: {socketId: string}) {
+      try {
+        const stream = await getLocalStream();
+        setStream(stream);
+        console.log(stream);
+        streamSuccess(stream);
+        // socket.emit('produce', { socketId, stream });
+      }
+
+      catch (error) {
+        console.error(error);
+      }
     })
 
     return () => {
