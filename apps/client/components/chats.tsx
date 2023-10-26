@@ -21,7 +21,7 @@ const Chats = () => {
 
             </div> */}
 
-<div className="absolute -top-8 left-0">
+<div className="absolute !-bottom-[40rem] left-0">
 
 <div className="flex w-[128px] items-start justify-between gap-5 ml-7 max-md:justify-center max-md:ml-2.5 max-md:mt-52">
 

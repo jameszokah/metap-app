@@ -1,10 +1,10 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
-  Logo,
+  // Logo,
   Chevron,
-  FullDisplayIcon,
-  SemiFullIcon,
-  FullLayoutIcon,
+  // FullDisplayIcon,
+  // SemiFullIcon,
+  // FullLayoutIcon,
   SunIcon,
   MoonIcon,
   SecureCheckFillIcon,
@@ -12,14 +12,50 @@ import {
 import Image from "next/image";
 import ButtonDisplayLayout from "./button_display_layout";
 import ButtonControl from "./button_control";
+import { ActiveTab, Tab } from "@/types/activeTab";
+import FullDisplayIcon from "@/components/icons/fullDisplayIcon";
+import { Logo } from "@/components/icons/logo";
+import SemiFullIcon from "@/components/icons/semiFullDisplayIcon";
+import FullLayoutIcon from "@/components/icons/gridLayoutIcon";
+import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
 
 interface HeaderProps {
   roomTitle: string;
   recodingTime: string;
+  activeTab: ActiveTab;
+  setActionTab: (active: ActiveTab) => void;
   setOpen: () => void;
 }
 
-const Header: FC<HeaderProps> = ({ roomTitle, recodingTime, setOpen }) => {
+
+const Header: FC<HeaderProps> = ({ roomTitle, recodingTime, setOpen, activeTab, setActionTab}) => {
+  const [darkMode, setDarkMode] = useState(false);
+
+
+const tabs: Tab[] = [
+  {
+    id: 1,
+    name: "Full",
+    icon: <FullDisplayIcon className={cn(activeTab === 'full' ? ' fill-primary' : '')} />,
+    tab: "full",
+
+  },
+  {
+    id: 2,
+    name: "Semi Full",
+    icon: <SemiFullIcon className={cn(activeTab === 'semi-full' ? 'fill-primary' : '')} />,
+    tab: "semi-full",
+  },
+  {
+    id: 3,
+    name: "Grid",
+    icon: <FullLayoutIcon className={cn(activeTab === 'grid' ? 'fill-primary' : '')}/>,
+    tab: "grid",
+  },
+];
+
   return (
     <>
       <header className="flex flex-col lg:flex-row justify-between items-center w-full mx-auto px-5 pt-1 lg:pt-2 ">
@@ -49,11 +85,8 @@ const Header: FC<HeaderProps> = ({ roomTitle, recodingTime, setOpen }) => {
           </div>
 
           <div className="flex flex-col lg:flex-row justify-between lg:w-[35%] items-center">
-            <Image
-              src={Logo}
-              alt="logo"
-              className="lg:p-1 p-2 opacity-40 lg:opacity-100 md:opacity-90"
-            />
+
+            <Logo className="lg:p-1 p-2 opacity-40 lg:opacity-100 md:opacity-90" />
 
             <div className="h-10 w-px mx-5 bg-gray-700 hidden lg:block"></div>
 
@@ -81,7 +114,22 @@ const Header: FC<HeaderProps> = ({ roomTitle, recodingTime, setOpen }) => {
 
           <div className="flex justify-between items-center lg:w-[35%]">
             <div className="flex justify-between items-center hidden space-x-1 lg:flex">
-              <ButtonDisplayLayout>
+
+              {tabs.map((tab) => (
+                <ButtonDisplayLayout
+                  key={tab.id}
+                  onClick={() => setActionTab(tab.tab)}
+                  className={`${
+                    activeTab === tab.tab
+                      ? "bg-primary/30"
+                      : "bg-semi-dark/50 hover:bg-semi-dark/80"
+                  } rounded-lg pb-0.5`}
+                >
+                 {tab.icon}
+                </ButtonDisplayLayout>
+              ))}
+
+              {/* <ButtonDisplayLayout >
                 <Image src={FullDisplayIcon} alt="Full Display Icon" />
               </ButtonDisplayLayout>
               <ButtonDisplayLayout>
@@ -89,16 +137,16 @@ const Header: FC<HeaderProps> = ({ roomTitle, recodingTime, setOpen }) => {
               </ButtonDisplayLayout>
               <ButtonDisplayLayout>
                 <Image src={FullLayoutIcon} alt="Full Layout Icon" />
-              </ButtonDisplayLayout>
+              </ButtonDisplayLayout> */}
             </div>
 
-            <div className="rounded-full bg-[#1B6469]/50 w-14 h-6 hidden lg:flex items-center border border-primary relative">
+            <div className="rounded-full bg-[#1B6469]/50 w-14 h-7 hidden lg:flex items-center border border-primary relative">
               <Image
                 src={MoonIcon}
                 alt="moon Icon"
                 className="absolute left-0 p-1 ml-1"
               />
-              <div className="w-6 h-6 rounded-full absolute bg-primary cursor-pointer"></div>
+              <div className={`w-7 h-7 rounded-full absolute z-20 bg-primary cursor-pointer ${darkMode ? 'right-0' : 'left-0'}`} onClick={() => setDarkMode(!darkMode)}></div>
               <Image
                 src={SunIcon}
                 alt="Sun Icon"
@@ -106,7 +154,10 @@ const Header: FC<HeaderProps> = ({ roomTitle, recodingTime, setOpen }) => {
               />
             </div>
             <div className="flex space-x-1">
-              <div className="w-9 h-9 rounded-full bg-white"></div>
+            <Avatar>
+              <AvatarImage src="https://github.com/jameszokah.png" />
+              <AvatarFallback>JZ</AvatarFallback>
+            </Avatar>
               <ButtonDisplayLayout className="p-1 rounded-lg">
                 <Image src={Chevron} alt="arrow down" />
               </ButtonDisplayLayout>
