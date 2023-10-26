@@ -1,6 +1,6 @@
 'use client'
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Header from "@/components/header";
 import Nav from "@/components/nav";
@@ -13,24 +13,67 @@ import { GroupOutlineIcon, Chevron, AddFillIcon } from "@/components/icons";
 import Controls from "@/components/controls";
 import { socket } from "@/lib/socket";
 import { getLocalStream, streamSuccess } from "@/lib/mediasoup";
+import FullDisplay from "@/components/app-tabs/fulldisplay";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ActiveTab } from "@/types/activeTab";
+import GridDisplay from "@/components/app-tabs/griddisplay";
+
 
 const Home: NextPage = () => {
   const [open, setOpen] = useState(true);
   const [chat, setChat] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [activeTab, setActiveTab] = useState<ActiveTab>("full");
 
 
-  const [isConnected, setIsConnected] = useState(socket.connected);
-  const [fooEvents, setFooEvents] = useState([]);
+  const [isBrowser, setIsBrowser] = useState(false);
 
   useEffect(() => {
+    setIsBrowser(true);
     function onConnect() {
-      setIsConnected(true);
+
       console.log("connected");
+
+
     }
 
     function onDisconnect() {
-      setIsConnected(false);
+      // setIsConnected(false);
+    }
+
+   async function onConnectionsuccess({ socketId }: {socketId: string}) {
+
+    // getLocalStream().then((stream) => {
+    //   setStream(stream);
+    //     console.log(socketId);
+    //     console.log(stream);
+    //     streamSuccess(stream);
+    //     videoRef.current!.srcObject = stream;
+    // });
+
+      try {
+        const stream = await getLocalStream();
+        if(!stream) return;
+        if(isBrowser) {
+        setStream(stream);
+        // console.log(socketId);
+        streamSuccess(stream);
+        // videoRef.current ? videoRef.current!.srcObject = stream : null;
+        if(videoRef.current) {
+          videoRef.current!.srcObject = stream;
+          videoRef.current!.play();
+        // console.log(stream);
+
+        }
+
+      }
+        // socket.emit('produce', { socketId, stream });
+      }
+
+      catch (error) {
+        // console.error(error);
+      }
     }
 
 
@@ -38,25 +81,20 @@ const Home: NextPage = () => {
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
 
-    socket.on('connection-success', async function({ socketId }: {socketId: string}) {
-      try {
-        const stream = await getLocalStream();
-        setStream(stream);
-        console.log(stream);
-        streamSuccess(stream);
-        // socket.emit('produce', { socketId, stream });
-      }
-
-      catch (error) {
-        console.error(error);
-      }
-    })
+    socket.on('connection-success', onConnectionsuccess)
 
     return () => {
       socket.off('connect', onConnect);
+      socket.off('connection-success', onConnectionsuccess)
       socket.off('disconnect', onDisconnect);
     };
   }, []);
+
+  const changeTab = () => {
+    if (activeTab === 'full') return <FullDisplay videoRef={videoRef} />
+    if (activeTab === 'grid') return <GridDisplay open={open} />
+    if (activeTab === 'semi-full') return <GridDisplay open={open} />
+  }
 
   return (
     <main className={""}>
@@ -69,10 +107,13 @@ const Home: NextPage = () => {
         <Box className="right-[20%] -bottom-[7.5%] rotate-45" />
         <Box className="right-[12%] bottom-[27.5%] rotate-45" />
         <Box className="right-[14%] bottom-[20.5%] rotate-45" />
+
         <Header
           roomTitle="Political Science Lectures"
           recodingTime="1:20:45"
           setOpen={() => setOpen(!open)}
+          activeTab={activeTab}
+          setActionTab={setActiveTab}
         />
         <div className="flex">
           <div
@@ -107,19 +148,15 @@ const Home: NextPage = () => {
 
             <section className="flex gap-4 lg:gap-x-8 lg:gap-y-8 relative z-50">
               <div className="flex flex-col grow lg:w-[73%] lg:absolute">
-                <section className="flex lg:grid lg:grid-flow-col w-[100vw] justify-center lg:w-full gap-4 text-blue-500">
-                  <div
-                    className={`bg-semi-dark  max-h-[65vh] lg:max-h-[75vh]  lg:w-full gap-4 lg:mt-1 overflow-auto scroll-smooth p-4 lg:p-4  rounded-md scrollbar-hide lg:scrollbar-default ${
-                      open ? "ml-0" : "ml-6"
-                    }`}
-                  >
-                    <VideoGridLayout />
-                  </div>
-                  {/* <div className='max-h-[65vh]'>
-                    </div> */}
-                </section>
+
+                {stream  ?
+
+                changeTab()
+
+                : <Skeleton className="w-full h-[31rem] bg-black flex justify-center items-center">Loading ...</Skeleton>}
+
                 <section
-                  className={`w-full flex justify-center items-center fixed lg:mt-1 lg:w-[80vw] h-16 left-0 -bottom-20 lg:left-0 lg:bottom-10 z-40 ${
+                  className={`w-full flex justify-center items-center fixed lg:mt-1 lg:w-[80vw] h-16 left-0 -bottom-20 lg:left-0 lg:bottom-8 z-40 ${
                     open
                       ? ""
                       : "lg:-left-2 transition-all duration-500 ease-in-out"
@@ -127,6 +164,7 @@ const Home: NextPage = () => {
                 >
                   <Controls />
                 </section>
+
               </div>
               <div className="lg:absolute lg:mr-5 lg:right-0 lg:-top-9 bg-semi-dark hidden lg:min-h-[88vh] py-auto lg:w-[24%] lg:block lg:col-end-5 rounded-md">
                 <div className="flex flex-col lg:relative w-full h-full">
@@ -163,3 +201,6 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+
+

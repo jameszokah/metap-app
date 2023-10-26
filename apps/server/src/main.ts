@@ -55,8 +55,9 @@ httpsServer.listen(PORT, () => {
 // socket.io server
 const io = new Server(httpsServer, {
     cors: {
-        origin: 'http://localhost:4200',
-        // 'https://miniature-trout-5r5qvrqqjgqf746g-4200.app.github.dev',
+        origin: 'https://miniature-trout-5r5qvrqqjgqf746g-4200.app.github.dev',
+        // 'http://localhost:4200',
+
         credentials: true,
         // allowedHeaders: ['Access-Control-Allow-Origin: http://localhost:4200'],
         // allowedHeaders: ['Access-Control-Allow-Origin: https://miniature-trout-5r5qvrqqjgqf746g-4200.app.github.dev'],
@@ -147,13 +148,13 @@ io.on('connection', async socket => {
         transports = removeItems(transports, socket.id, 'transport')
 
         const peer = peers[socket.id]
-        const roomName = peer.roomName
+        const roomName = peer?.roomName || ''
         delete peers[socket.id]
 
         // remove socket from room
         rooms[roomName] = {
-            router: rooms[roomName].router,
-            peers: rooms[roomName].peers.filter(socketId => socketId !== socket.id)
+            router: rooms[roomName]?.router,
+            peers: rooms[roomName]?.peers.filter(socketId => socketId !== socket.id)
         }
     })
 

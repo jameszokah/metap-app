@@ -1,28 +1,33 @@
-import { ReactPortal, FC } from "react";
+import { cn } from "@/lib/utils";
+import { Slot } from "@radix-ui/react-slot";
+import React, { ReactPortal, FC } from "react";
 
-interface ButtonControlProps {
+interface ButtonControlProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: JSX.Element[] | JSX.Element | React.ReactNode;
   className?: string;
-  onClick?: () => void;
+  asChild?: boolean;
 }
-const ButtonControl: FC<ButtonControlProps> = ({
+const ButtonControl= React.forwardRef<HTMLButtonElement, ButtonControlProps>(({
   children,
   className,
-  onClick,
+  asChild = false,
   ...props
-}) => {
+}, ref) => {
+
+  const Comp = asChild ? Slot : "button"
   return (
-    <button
+    <Comp
       type="button"
       data-mdb-ripple="true"
       data-mdb-ripple-color="light"
-      onClick={onClick}
+      // onClick={onClick}
       {...props}
-      className={`font-medium text-xs text-center leading-tight uppercase rounded  focus:outline-none focus:ring-0 transition duration-150 ease-in-out ${className}`}
+      ref={ref}
+      className={cn(`font-medium text-xs text-center leading-tight uppercase rounded  focus:outline-none focus:ring-0 transition duration-150 ease-in-out`, className)}
     >
       {children}
-    </button>
+    </Comp>
   );
-};
+});
 
 export default ButtonControl;

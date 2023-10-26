@@ -5,7 +5,8 @@ import { Consumer } from 'mediasoup-client/lib/Consumer';
 import { RtpCapabilities } from 'mediasoup-client/lib/RtpParameters'
 import { AppData, Producer, ProducerOptions, Transport } from 'mediasoup-client/lib/types';
 
-const roomName = window.location.pathname.split('/')[2]
+// const roomName = window.location.pathname.split('/')[2]
+const roomName = 'test'
 
 type MediaStreamTrackParameters = { params: {
   encodings: {
@@ -99,16 +100,17 @@ const joinRoom = () => {
 export const getLocalStream = async () => {
   return await navigator.mediaDevices.getUserMedia({
     audio: true,
-    video: {
-      width: {
-        min: 640,
-        max: 1920,
-      },
-      height: {
-        min: 400,
-        max: 1080,
-      }
-    }
+    video: true,
+    // video: {
+    //   width: {
+    //     min: 640,
+    //     max: 1920,
+    //   },
+    //   height: {
+    //     min: 400,
+    //     max: 1080,
+    //   }
+    // }
   })
 
 }

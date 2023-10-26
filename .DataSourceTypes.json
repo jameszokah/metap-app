@@ -1,0 +1,8 @@
+{
+	"dataSources": {
+		"Tab": {
+			"name": "Tab",
+			"dsn": "d"
+		}
+	}
+}

@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import React, { FC } from "react";
 
 const ButtonDisplayLayout = ({
@@ -12,7 +13,7 @@ const ButtonDisplayLayout = ({
 }) => {
   return (
     <button
-      className={`p-2 rounded-xl ${className}`}
+      className={cn(`p-2 rounded-xl`,className)}
       type="button"
       data-mdb-ripple="true"
       data-mdb-ripple-color="light"
