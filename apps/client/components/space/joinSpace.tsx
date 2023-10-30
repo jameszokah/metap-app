@@ -41,7 +41,7 @@ export default function JoinSpace({ children}: { children: React.ReactNode}) {
             <Button className="dark:bg-primary" onClick={
               () => {
                 if(spaceCode.length === 0) return;
-                router.push(`/space/${spaceCode}`);
+                router.push(`/at/${spaceCode}`);
 
               }
             }>Join</Button>
