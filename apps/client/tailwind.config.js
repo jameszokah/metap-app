@@ -85,7 +85,17 @@ module.exports = {
             transitionDelay: {
                 0: "0ms",
             },
+
+
             keyframes: {
+                "accordion-down": {
+                    from: { height: 0 },
+                    to: { height: "var(--radix-accordion-content-height)" },
+                },
+                "accordion-up": {
+                    from: { height: "var(--radix-accordion-content-height)" },
+                    to: { height: 0 },
+                },
                 "fade-in": {
                     from: { opacity: 0, transform: "translateY(-10px)" },
                     to: { opacity: 1, transform: "none" },
@@ -139,17 +149,6 @@ module.exports = {
                     "50%": {
                         transform: "scale(0.98)",
                     },
-                },
-            },
-
-            keyframes: {
-                "accordion-down": {
-                    from: { height: 0 },
-                    to: { height: "var(--radix-accordion-content-height)" },
-                },
-                "accordion-up": {
-                    from: { height: "var(--radix-accordion-content-height)" },
-                    to: { height: 0 },
                 },
             },
             animation: {

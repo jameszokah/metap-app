@@ -102,7 +102,7 @@ export const HeroImage = () => {
 
         <img
           className={classNames(
-            "relative z-10 transition-opacity delay-[680ms]",
+            "relative z-10 transition-opacity delay-[680ms] w-full h-full object-contain object-center",
             inView ? "opacity-100" : "opacity-0"
           )}
           src="/assets/metap_desktop.png"

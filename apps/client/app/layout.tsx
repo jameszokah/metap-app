@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/provider/themeProvider"
 import classNames from 'classnames';
 import './global.css';
 
@@ -13,7 +14,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={classNames('')}>{children}</body>
+      <body className={classNames('')}>
+      <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+      </body>
     </html>
   );
 }

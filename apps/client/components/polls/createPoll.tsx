@@ -10,10 +10,16 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { SetStateAction } from "react"
 
-export default function CreatePoll({ children }: { children: React.ReactNode}) {
+export default function CreatePoll({ children, createPollToggled, setCreatePollToggled }: { children: React.ReactNode, createPollToggled?: boolean,  setCreatePollToggled?: (value: SetStateAction<boolean>) => void}) {
   return (
-    <Dialog>
+    <Dialog
+    open={!createPollToggled}
+    // onOpenChange={setCreatePollToggled}
+    modal={false}
+
+    >
       <DialogTrigger asChild >
         {children}
       </DialogTrigger>
