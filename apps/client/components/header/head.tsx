@@ -1,15 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Ref, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/container";
 import { HamburgerIcon } from "@/components/icons/hamburger";
 import { Logo } from "@/components/icons/logo";
 import classNames from "classnames";
+import { HomeNav } from "@/components/navigations/homeNav";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NavLinks } from "@/components/navigations/NavLinks";
 
-export const Header = () => {
+export const Header = ({ref}: {ref?: Ref<HTMLButtonElement>}) => {
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = useState(false);
+  const [hamburgerIsOpen, setHamburgerIsOpen] = useState(false);
 
   useEffect(() => {
     const html = document.querySelector("html");
@@ -28,16 +34,31 @@ export const Header = () => {
     };
   }, [setHamburgerMenuIsOpen]);
 
+  useEffect(() => {
+
+    const closeHamburgerNavigation = () => {
+      if(window.innerWidth > 768) setHamburgerIsOpen(false);
+    };
+
+    window.addEventListener("orientationchange", closeHamburgerNavigation);
+    window.addEventListener("resize", closeHamburgerNavigation);
+
+    return () => {
+      window.removeEventListener("orientationchange", closeHamburgerNavigation);
+      window.removeEventListener("resize", closeHamburgerNavigation);
+    };
+  }, [setHamburgerIsOpen]);
+
   return (
     <header className="fixed top-0 left-0 z-10 w-full border-b border-transparent-white backdrop-blur-[12px]">
-      <Container className="flex h-[var(--navigation-height)]">
-        <Link className="flex items-center text-md mr-6" href="/">
+      <Container className="flex justify-between items-center h-[var(--navigation-height)] w-full">
+        <Link className="flex items-center text-md mr-10" href="/">
           <Logo className="mr-5 h-[3.1rem] w-[3.1rem]" /> Metap
         </Link>
 
         <div
           className={classNames(
-            "transition-[visibility] md:visible",
+            "transition-[visibility] md:visible md:delay-500 ",
             hamburgerMenuIsOpen ? "visible" : "delay-500 invisible"
           )}
         >
@@ -49,52 +70,46 @@ export const Header = () => {
                 : "translate-x-[-100vw] opacity-0"
             )}
           >
-            <ul
-              className={classNames(
-                "flex h-full flex-col md:flex-row md:items-center [&_li]:ml-6 [&_li]:border-b [&_li]:border-grey-dark md:[&_li]:border-none",
-                "ease-in [&_a:hover]:text-gray-500 [&_a]:flex [&_a]:h-[var(--navigation-height)] [&_a]:w-full [&_a]:translate-y-8 [&_a]:items-center [&_a]:text-lg [&_a]:transition-[color,transform] [&_a]:duration-300 md:[&_a]:translate-y-0 md:[&_a]:text-sm [&_a]:md:transition-colors",
-                hamburgerMenuIsOpen && "[&_a]:translate-y-0"
-              )}
-            >
-              <li>
-                <Link href="#">Features</Link>
-              </li>
-              <li>
-                <Link href="#">Method</Link>
-              </li>
-              <li className="md:hidden lg:block">
-                <Link href="#">Customers</Link>
-              </li>
-              <li className="md:hidden lg:block">
-                <Link href="#">Changelog</Link>
-              </li>
-              <li className="md:hidden lg:block">
-                <Link href="#">Integrations</Link>
-              </li>
-              <li>
-                <Link href="#">Pricing</Link>
-              </li>
-              <li>
-                <Link href="#">Join</Link>
-              </li>
-            </ul>
+            <NavLinks />
+            {/* <HomeNav /> */}
           </nav>
         </div>
 
-        <div className="ml-auto flex h-full items-center">
-          <Link className="mr-6 text-sm" href="#">
+<div className="flex justify-center items-center">
+<div className="ml-auto flex h-full items-center">
+          <Link className="mr-6 text-sm" href="/login">
             Log in
           </Link>
-          <Button variant={"default"} className="bg-primary">Sign up</Button>
+          <Button ref={ref} variant={"default"} className="dark:bg-primary dark:border-2 rounded-lg">Sign up</Button>
         </div>
 
-        <button
+
+        <Sheet open={hamburgerIsOpen} onOpenChange={setHamburgerIsOpen}>
+      <SheetTrigger asChild>
+      <Button
           className="ml-6 md:hidden"
-          onClick={() => setHamburgerMenuIsOpen((open) => !open)}
+          onClick={() => setHamburgerIsOpen(true)}
         >
           <span className="sr-only">Toggle menu</span>
           <HamburgerIcon />
-        </button>
+        </Button>
+      </SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Metap</SheetTitle>
+          <SheetDescription>
+            The next new virtual Conferencing you will need.
+          </SheetDescription>
+        </SheetHeader>
+        <NavLinks hamburgerIsOpen={hamburgerIsOpen} />
+        <SheetFooter>
+          <SheetClose asChild>
+            <Button type="submit">Save changes</Button>
+          </SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
+</div>
       </Container>
     </header>
   );

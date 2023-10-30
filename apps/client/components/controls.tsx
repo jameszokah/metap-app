@@ -1,3 +1,4 @@
+'use client'
 import { FC, useState } from "react";
 import Image from "next/image";
 import ButtonControl from "./button_control";import {
@@ -54,6 +55,7 @@ const Controls: FC = () => {
   const [handsToggled, setHandsToggled] = useState(false);
   const [hMenuToggled, setHMenuToggled] = useState(false);
   const [secureToggled, setSecureToggled] = useState(false);
+  const [createPollToggled, setCreatePollToggled] = useState(false);
 
 
   // const onClick = () => {
@@ -98,7 +100,7 @@ const Controls: FC = () => {
           }}>
             <Image src={CallFillIcon} alt="logout" className="" />
           </ButtonControl>
-          <Excali>
+          <Excali editToggled={editToggled} setEditToggled={setEditToggled}>
           <ButtonControl className={`bg-gray-300/20 rounded-lg p-2 hidden lg:block focus:bg-gray-700 hover:bg-gray-700 hover:shadow-lg active:bg-gray-400/10  ${editToggled ? 'bg-primary hover:bg-primary focus:bg-primary' : ''} `} onClick={() => {
             setEditToggled(!editToggled);
           }}>
@@ -121,9 +123,14 @@ const Controls: FC = () => {
 
         <div className=" flex justify-evenly items-center w-[50%]">
 
-          <DropdownMenu>
+          <DropdownMenu >
       <DropdownMenuTrigger asChild>
-      <Button size={"icon"} variant={"ghost"} className="hover:bg-semi-dark p-2 hove:shadow-md focus:shadow-lg active:shadow-lg">
+      <Button size={"icon"} variant={"ghost"} className="hover:bg-semi-dark p-2 hove:shadow-md focus:shadow-lg active:shadow-lg"
+      onClick={() => {
+        setHMenuToggled(!hMenuToggled);
+          }}
+      >
+
             <Image src={HMenuFillIcon} alt="logout" className="" />
           </Button>
 
@@ -136,9 +143,17 @@ const Controls: FC = () => {
             Profile
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <CreatePoll>
+          <CreatePoll createPollToggled={createPollToggled} setCreatePollToggled={setCreatePollToggled} >
           <DropdownMenuItem>
-            create new Poll
+            <div className=""
+            onClick={
+              () => {
+                if(hMenuToggled) setCreatePollToggled(!createPollToggled)
+              }
+            }>
+              create new Poll
+            </div>
+            {/* create new Poll */}
             <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
           </DropdownMenuItem>
           </CreatePoll>
@@ -154,7 +169,7 @@ const Controls: FC = () => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Team</DropdownMenuItem>
+          {/* <DropdownMenuItem>Team</DropdownMenuItem> */}
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
             <DropdownMenuPortal>
@@ -166,14 +181,14 @@ const Controls: FC = () => {
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-          <DropdownMenuItem>
+          {/* <DropdownMenuItem>
             New Team
             <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>GitHub</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
+        {/* <DropdownMenuItem>GitHub</DropdownMenuItem>
+        <DropdownMenuItem>Support</DropdownMenuItem> */}
         <DropdownMenuItem disabled>API</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>

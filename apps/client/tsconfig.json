@@ -45,6 +45,9 @@
       "@/types/*": [
         "./types/*"
       ],
+      "@/provider/*": [
+        "./provider/*"
+      ],
     }
   },
   "include": [

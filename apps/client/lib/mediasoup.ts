@@ -1,9 +1,9 @@
 
-const io = require('socket.io-client')
 import { Device } from 'mediasoup-client'
 import { Consumer } from 'mediasoup-client/lib/Consumer';
 import { RtpCapabilities } from 'mediasoup-client/lib/RtpParameters'
 import { AppData, Producer, ProducerOptions, Transport } from 'mediasoup-client/lib/types';
+import { socket } from './socket';
 
 // const roomName = window.location.pathname.split('/')[2]
 const roomName = 'test'
@@ -28,7 +28,6 @@ type ConsumerTransportType = {
   consumerTransport: Transport,
 }
 
-const socket = io("/mediasoup")
 
 // socket.on('connection-success', ({ socketId }: {socketId: string}) => {
 //   console.log(socketId)
