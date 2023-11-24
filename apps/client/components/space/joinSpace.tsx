@@ -30,7 +30,7 @@ export default function JoinSpace({ children}: { children: React.ReactNode}) {
             Please enter the space code or link to join the space.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-4 gap-4 items-center justify-between py-4 w-full h-full">
+        <div className="grid grid-cols-4 gap-4 items-center text-gray-600 dark:text-gray-200 justify-between py-4 w-full h-full">
           <div className="gap-4 col-span-2 flex flex-col items-center justify- w-full">
             <div className="">
             <Label htmlFor="code" className="text-right pb-5 text-base">

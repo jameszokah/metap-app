@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   // Logo,
   Chevron,
@@ -19,6 +19,8 @@ import SemiFullIcon from "@/components/icons/semiFullDisplayIcon";
 import FullLayoutIcon from "@/components/icons/gridLayoutIcon";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useTheme } from 'next-themes';
+
 
 
 interface HeaderProps {
@@ -31,8 +33,13 @@ interface HeaderProps {
 
 
 const Header: FC<HeaderProps> = ({ roomTitle, recodingTime, setOpen, activeTab, setActionTab}) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const { theme, setTheme } = useTheme();
+  // const [darkMode, setDarkMode] = useState(false);
 
+
+useEffect(() => {
+  console.log(theme)
+}, [])
 
 const tabs: Tab[] = [
   {
@@ -140,13 +147,13 @@ const tabs: Tab[] = [
               </ButtonDisplayLayout> */}
             </div>
 
-            <div className="rounded-full bg-[#1B6469]/50 w-14 h-7 hidden lg:flex items-center border border-primary relative">
+            <div className="rounded-full bg-[#1B6469]/50 w-16 h-7 hidden lg:flex items-center border border-primary relative">
               <Image
                 src={MoonIcon}
                 alt="moon Icon"
                 className="absolute left-0 p-1 ml-1"
               />
-              <div className={`w-7 h-7 rounded-full absolute z-20 bg-primary cursor-pointer ${darkMode ? 'right-0' : 'left-0'}`} onClick={() => setDarkMode(!darkMode)}></div>
+              <div className={`w-7 h-7 rounded-full absolute z-20 bg-primary cursor-pointer ${theme === 'dark' ? 'right-0' : 'left-0'}`} onClick={() => theme === 'dark' ? setTheme('light') : setTheme('dark')}></div>
               <Image
                 src={SunIcon}
                 alt="Sun Icon"

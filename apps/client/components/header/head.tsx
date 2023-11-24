@@ -50,7 +50,7 @@ export const Header = ({ref}: {ref?: Ref<HTMLButtonElement>}) => {
   }, [setHamburgerIsOpen]);
 
   return (
-    <header className="fixed top-0 left-0 z-10 w-full border-b border-transparent-white backdrop-blur-[12px]">
+    <header className="fixed top-0 left-0 z-10 text-gray-200 w-full border-b border-transparent-white backdrop-blur-[12px]">
       <Container className="flex justify-between items-center h-[var(--navigation-height)] w-full">
         <Link className="flex items-center text-md mr-10" href="/">
           <Logo className="mr-5 h-[3.1rem] w-[3.1rem]" /> Metap
@@ -77,10 +77,14 @@ export const Header = ({ref}: {ref?: Ref<HTMLButtonElement>}) => {
 
 <div className="flex justify-center items-center">
 <div className="ml-auto flex h-full items-center">
-          <Link className="mr-6 text-sm" href="/login">
+          <Link className="mr-6 text-sm" href="/signin">
             Log in
           </Link>
-          <Button ref={ref} variant={"default"} className="dark:bg-primary dark:border-2 rounded-lg">Sign up</Button>
+          <Button asChild ref={ref} variant={"default"} className="dark:bg-primary dark:border-2 rounded-lg">
+          <Link href="/signup">
+            Sign ups
+          </Link>
+          </Button>
         </div>
 
 
