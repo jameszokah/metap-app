@@ -48,6 +48,9 @@
       "@/provider/*": [
         "./provider/*"
       ],
+      "@/auth/*": [
+        "./auth/*"
+      ],
     }
   },
   "include": [

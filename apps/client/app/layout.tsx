@@ -1,6 +1,8 @@
 import { ThemeProvider } from "@/provider/themeProvider"
 import classNames from 'classnames';
 import './global.css';
+import { cn } from "@/lib/utils";
+import ClientProvider from "@/provider/clientProvider";
 
 export const metadata = {
   title: 'Metap',
@@ -14,15 +16,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={classNames('')}>
+      <body className={cn('text-gray-600 dark:text-gray-200')}>
+      <ClientProvider>
       <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
-            disableTransitionOnChange
+            // disableTransitionOnChange
           >
             {children}
           </ThemeProvider>
+      </ClientProvider>
       </body>
     </html>
   );
