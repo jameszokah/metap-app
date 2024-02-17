@@ -11,7 +11,7 @@ process.title = 'metap server';
 import express, { Request, Response } from 'express'
 const app = express()
 
-import https from 'httpolyglot'
+import https from 'https'
 import fs from 'fs'
 import path from 'path'
 import cors from 'cors'
@@ -23,8 +23,26 @@ import * as mediasoup from 'mediasoup'
 import { Transport } from 'mediasoup/node/lib/types';
 
 
+
+const devUrl = 'https://miniature-trout-5r5qvrqqjgqf746g-4200.app.github.dev'
+const corsOptions ={
+  origin: devUrl,
+  credentials:true,            //access-control-allow-credentials:true
+  // optionSuccessStatus:200
+
+}
 app.use(cors())
+app.use(express.json())
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*")
+res.setHeader("Access-Control-Allow-Credentials", "true")
+next()
+})
+
 app.get('/', (req: Request, res: Response) => {
+
+    res.setHeader('Access-Control-Allow-Origin', '*')
     res.json({
       query: req.params
     })
@@ -55,16 +73,29 @@ httpsServer.listen(PORT, () => {
 // socket.io server
 const io = new Server(httpsServer, {
     cors: {
-        origin: 'https://miniature-trout-5r5qvrqqjgqf746g-4200.app.github.dev',
+        origin:
+        devUrl,
+        // 'https://miniature-trout-5r5qvrqqjgqf746g-4200.app.github.dev',
         // 'http://localhost:4200',
 
         credentials: true,
         // allowedHeaders: ['Access-Control-Allow-Origin: http://localhost:4200'],
-        // allowedHeaders: ['Access-Control-Allow-Origin: https://miniature-trout-5r5qvrqqjgqf746g-4200.app.github.dev'],
+        allowedHeaders: ['Access-Control-Allow-Origin: https://miniature-trout-5r5qvrqqjgqf746g-4200.app.github.dev'],
         // methods: ['GET', 'POST'],
 
     },
 })
+
+io.engine.on("initial_headers", (headers, req) => {
+  headers["Access-Control-Allow-Origin"] = "*";
+});
+
+
+io.engine.on("connection_error", (err) => {
+  console.log(err.code);     // 3
+  console.log(err.message);  // "Bad request"
+  console.log(err.context);  // { name: 'TRANSPORT_MISMATCH', transport: 'websocket', previousTransport: 'polling' }
+});
 
 // socket.io namespace (could represent a room?)
 // const connections = io('/mediasoup')

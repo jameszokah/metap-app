@@ -34,6 +34,11 @@ const Home: NextPage = () => {
     function onConnect() {
 
       console.log("connected");
+      const transport = socket.io.engine.transport.name; // in most cases, "polling"
+
+  socket.io.engine.on("upgrade", () => {
+    const upgradedTransport = socket.io.engine.transport.name; // in most cases, "websocket"
+  });
 
 
     }
@@ -55,10 +60,11 @@ const Home: NextPage = () => {
       try {
         const stream = await getLocalStream();
         if(!stream) return;
-        if(isBrowser) {
+
         setStream(stream);
         // console.log(socketId);
         streamSuccess(stream);
+
         // videoRef.current ? videoRef.current!.srcObject = stream : null;
         if(videoRef.current) {
           videoRef.current!.srcObject = stream;
@@ -67,7 +73,6 @@ const Home: NextPage = () => {
 
         }
 
-      }
         // socket.emit('produce', { socketId, stream });
       }
 
@@ -153,7 +158,7 @@ const Home: NextPage = () => {
 
                 changeTab()
 
-                : <Skeleton className="w-full h-[31rem] bg-black flex justify-center items-center">Loading ...</Skeleton>}
+                : <Skeleton className="w-full h-[31rem] bg-black flex justify-center items-center">connecting ...</Skeleton>}
 
                 <section
                   className={`w-full flex justify-center items-center fixed lg:mt-1 lg:w-[80vw] h-16 left-0 -bottom-20 lg:left-0 lg:bottom-8 z-40 ${
